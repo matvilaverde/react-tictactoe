@@ -5,7 +5,7 @@ import './index.css';
 function Square(props) {
   return (
     <button className="square"
-    onClick={props.onClick}>
+      onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -23,8 +23,8 @@ class Board extends React.Component {
 
   handleClick(i) {
     const squares = this.state.squares.slice();
-    if(calculateWinner(squares) || squares[i]) return;
-    
+    if (calculateWinner(squares) || squares[i]) return;
+
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       squares,
@@ -40,9 +40,13 @@ class Board extends React.Component {
 
   render() {
     const winner = calculateWinner(this.state.squares);
+    const draw = calculateDraw(this.state.squares);
+
     let status;
-    if(winner)
+    if (winner)
       status = 'Winner: ' + winner;
+    else if (draw)
+      status = 'Game over! It\'s a draw!';
     else
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
@@ -111,4 +115,17 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function calculateDraw(squares) {
+  let moveCounter = 0;
+  for (let i = 0; i < squares.length; i++) {
+    if(squares[i] !== null)
+      moveCounter++;
+  }
+  
+  if(moveCounter === 9)
+    return true;
+  
+  return false;
 }
